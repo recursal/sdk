@@ -9,7 +9,7 @@ const openai = new OpenAI({
   baseURL: 'https://api.recursal.com/v1',
   apiKey: process.env.RECURSAL_API_KEY,
 });
-const DEFAULT_MODEL='EagleX-V1.7'
+const DEFAULT_MODEL='EagleX-V2'
 
 async function fetchSiteMeta(url, attempt = 1) {
   try {
