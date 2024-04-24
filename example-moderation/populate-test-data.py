@@ -1,36 +1,54 @@
 import requests
 import csv
 from bs4 import BeautifulSoup
-import os
+import sqlite3
 
-# disable ssl verification for requests ...
-os.environ['REQUESTS_CA_BUNDLE'] = ""
-os.environ['CURL_CA_BUNDLE'] = ""
+TEMPLATE_FILE='examples.base.csv'
+DB_PATH='moderation.db'
+conn = sqlite3.connect(DB_PATH)
+
+# Function to create a SQLite database and table
+def ensure_table():
+  c = conn.cursor()
+  c.execute('''CREATE TABLE IF NOT EXISTS memoization (
+    url TEXT PRIMARY KEY,
+    annotation TEXT,
+    label TEXT,
+    html TEXT
+  )''')
+  conn.commit()
 
 def get_meta_description(page_content):
   soup = BeautifulSoup(page_content, features='html.parser')
   t = soup.find('meta', {'name': 'description'})
   return t.get('content') if t else None
 
-TEMPLATE_FILE='examples.base.csv'
-OUT_FILE='examples.csv'
 
-with open(OUT_FILE, 'w') as outfile:
-  out = csv.DictWriter(outfile, ["URL", "Annotation", "Label", "meta_description"])
-  out.writeheader()
+ensure_table()
+with open(TEMPLATE_FILE, 'r') as csvfile:
+  spamreader = csv.DictReader(csvfile)
+  c = conn.cursor()
 
-  with open(TEMPLATE_FILE, 'r') as csvfile:
-    spamreader = csv.DictReader(csvfile)
+  for row in spamreader:
+    try:
+      url = row['URL']
+      annotation = row['Annotation']
+      label = row['Label']
+      print(f"Processing {url} ...")
 
-    for row in spamreader:
-      try:
-        print(f"Requesting {row['URL']}")
-        page = requests.get(row['URL']).text
-        row["meta_description"] = get_meta_description(page)
+      c.execute("SELECT html FROM memoization WHERE url=?", (url,))
+      result = c.fetchone()
+      if result:
+        print("Already memoized")
+        continue
 
-        # what else?
-        out.writerow(row)
-      except:
-        print(f"Failure with {row['URL']}. Skipping.")
-        pass
+      # ok, URL isn't memoized. do it.
+      html = requests.get(url).text
+      c.execute("INSERT INTO memoization (url, annotation, label, html) VALUES (?, ?, ?, ?)", (url, annotation, label, html))
+      conn.commit()
 
+    except Exception as e:
+      print(f"Failure with {url}: {e}. Skipping.")
+      pass
+
+conn.close()
