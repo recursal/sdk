@@ -1,0 +1,40 @@
+URL,Annotation,Label
+https://www.kiddle.co,Kiddle - A visually-oriented search engine designed for kids that limits search results to child-friendly websites and emphasizes safety.,allow
+https://www.kidzsearch.com,KidzSearch - This search engine uses strict safe search settings with Google to ensure that all content accessible is suitable for kids.,allow
+https://www.alarms.org/kidrex,KidRex - KidRex uses Google SafeSearch technology and maintains a database of inappropriate websites and keywords to block.,allow
+https://www.kidtopia.info,Kidtopia - A search engine built by teachers for young children and elementary students that only includes trusted sources.,allow
+https://www.sweetsearch.com,SweetSearch - A search engine that searches only the sites that have been evaluated and approved by a team of educators.,allow
+https://www.factmonster.com,"Fact Monster - A combination of educational resources, fun facts, and homework help that is presented in a kid-friendly manner.",allow
+https://www.discoverykids.com,"Discovery Kids - Provides educational videos, games, and other activities that encourage learning in a fun and interactive way.",allow
+https://www.kids.nationalgeographic.com,"National Geographic Kids - Features educational content on animals, science, history, and geography geared towards kids.",allow
+https://www.pbskids.org,PBS Kids - Offers a variety of educational games and videos from PBS shows that are designed to enhance children’s learning.,allow
+https://www.starfall.com,Starfall - Specializes in reading and phonics games and is particularly useful for young children just starting to read.,allow
+https://www.youtube.com/kids/,YouTube Kids - A secure version of YouTube designed to provide kids with a safer environment where they can explore their interests through videos without stumbling upon inappropriate content.,allow
+https://www.khanacademy.org,Khan Academy Kids - Offers educational games and videos that cover a range of subjects. It’s particularly good for younger kids in the age group.,allow
+https://www.prodigygame.com,"Prodigy - A game-based learning platform that covers math topics presented in a fun and engaging way, tailored for elementary to middle school students.",allow
+https://www.youtube.com/channel/UChGJGhZ9SOOHvBB0Y4DOO_w,"Ryan’s World on YouTube - While originally known for toy reviews, this channel has expanded to include educational content like simple science experiments and learning about animals, suitable for older kids within this age range.",allow
+https://tocaboca.com,Toca Kitchen 2 - An interactive game that allows kids to experiment with different food combinations in a playful and educational manner.,allow
+https://games.lol,"Lego Creator Islands - A game that extends the Lego playset experience into the digital world, encouraging creativity and problem-solving.",allow
+https://www.roblox.com,"Roblox - Popular with older kids, it allows users to create and play games created by other users, fostering an environment of creativity and interaction",allow
+https://scratch.mit.edu,"Scratch - Developed by MIT, this free programming language and online community allows kids to program and share interactive media such as stories, games, and animation with people from all over the world.",allow
+https://genius.com,Genius - Popular for song lyrics that may include mature language or themes,inspect
+https://www.imdb.com,"IMDb - Mainly a database for movies and TV shows, some content descriptions and user comments might include mature themes.",inspect
+https://www.bleacherreport.com,"Bleacher Report - A sports news website that sometimes features articles with mature themes or language discussing controversies or scandals in sports.
+",inspect
+https://www.vice.com,"Vice - Known for its bold and often provocative journalistic style, which can include articles and documentaries on mature topics.",inspect
+https://www.cracked.com,"Cracked - Offers a mix of humorous articles, videos, and lists, some of which may delve into adult themes or use mature language.",inspect
+https://www.buzzfeed.com,"BuzzFeed - Known for quizzes, entertainment, and lifestyle articles, some content might explore mature themes or use language not suitable for children.",inspect
+https://www.yelp.com,"Yelp - Primarily a business review site, some reviews may contain adult language or references not appropriate for children.",inspect
+https://www.gamespot.com,"GameSpot - Focuses on video game news, reviews, and forums, where discussions can sometimes veer into mature territory or explore games with mature ratings.",inspect
+https://www.rollingstone.com,"Rolling Stone - Covers music, culture, and politics with articles that can sometimes include adult content and themes.",inspect
+https://www.epicurious.com,"Epicurious - While primarily a recipe and cooking site, some discussions and articles might touch on alcoholic beverages and other adult-themed culinary topics.",inspect
+https://www.deviantart.com,"DeviantArt - An online community showcasing various forms of user-made artwork, some of which may be adult or explicit in nature.",inspect
+https://www.fandom.com,"Fandom - Provides user-generated content and forums on a vast array of topics, including mature-themed games, shows, and movies.",inspect
+https://www.pitchfork.com,"Pitchfork - Known for its music criticism and commentary, which often includes discussions of albums with explicit content.",inspect
+https://www.complex.com,"Complex - Features the latest in style, music, sports, and sneakers but often includes adult language and themes.",inspect
+https://www.metacritic.com,"Metacritic - Compiles reviews of music, games, tv shows, and movies which may cover mature-rated content.",inspect
+https://www.rottentomatoes.com,"Rotten Tomatoes - Offers movie and TV show reviews, some of which discuss mature-themed content.",inspect
+https://www.ign.com,"IGN - Covers the latest in video gaming and entertainment, with some content focused on mature-rated games",inspect
+https://www.techcrunch.com,TechCrunch - Focuses on high tech and startup companies but occasionally covers adult themes in the tech industry.,inspect
+https://www.wired.com,"Wired - Reports on how emerging technologies affect culture, the economy, and politics, occasionally including adult content or themes.",inspect
+https://www.theverge.com,"The Verge - Covers the intersection of technology, science, art, and culture with content that sometimes discusses mature subjects.",inspect
