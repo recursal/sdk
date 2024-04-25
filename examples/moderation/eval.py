@@ -23,7 +23,7 @@ def get_description(soup):
 if __name__ == "__main__":
   with get_db_connection() as conn, open('moderation-results.csv', 'w') as outfile:
     csv = csv.writer(outfile)
-    csv.writerow(["URL", "title", "description", "Reason", "Harmful", "Confidence"])
+    csv.writerow(["URL", "title", "description", "Harmful", "Confidence", "Data_quality", "Reason"])
 
     c = conn.cursor()
     c.execute("SELECT url, annotation, label, html FROM memoization")
@@ -60,6 +60,6 @@ if __name__ == "__main__":
 
       try:
         generated = json.loads(generated)
-        csv.writerow([url, title, description, *[v for v in generated.values()]])
+        csv.writerow([url, title, description, *[v for v in generated['Assessment'].values()]])
       except Exception as e:
         print(f"JSON parsing failure: {e}")
