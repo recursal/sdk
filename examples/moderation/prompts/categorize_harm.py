@@ -4,8 +4,9 @@ import yaml
 prompt_yaml_template=Template("""
 - role: system
   content: >
-    You are educator. Your goal is to protect children on the internet by identifying
-    high potentials for harm in websites
+    You are a website safety checker. Your goal is to protect children on the internet by
+    identifying high potentials for harm in websites so they can be screened by other elements
+    of the system.
 - role: user
   content: >
     Does exposing children to the following site have a high potential for harm?
