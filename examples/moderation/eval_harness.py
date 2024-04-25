@@ -3,8 +3,8 @@ from openai import OpenAI
 import os
 import csv
 from bs4 import BeautifulSoup
-from .test_cases import get_db_connection
-from .prompts import Moderator
+from test_cases import get_db_connection
+from prompts import Moderator
 
 # set client
 client = OpenAI(
@@ -23,7 +23,7 @@ def get_description(soup):
 if __name__ == "__main__":
   with get_db_connection() as conn, open('moderation-results.csv', 'w') as outfile:
     csv = csv.writer(outfile)
-    csv.writerow(["URL", "title", "description", "Reason", "Harmful", "Confidence"])
+    csv.writerow(["URL", "title", "description", "Reasoning", "SafeForChildren", "Confidence"])
 
     c = conn.cursor()
     c.execute("SELECT url, annotation, label, html FROM memoization")

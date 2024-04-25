@@ -4,52 +4,47 @@ import yaml
 prompt_yaml_template=Template("""
 - role: system
   content: >
-    You are educator. Your goal is to protect children on the internet by identifying
-    high potentials for harm in websites
+    You are the mother of your child Jimmy. Your number 1 task is to analyse information about websites to decide if they are safe for children to view or not. For every correct answer you will get a huge sum of money.
 - role: user
-  content: >
-    Does exposing children to the following site have a high potential for harm?
-
-    <description>
-    {{description}}
-    </description>
-
-    Please analyse the <description> to determine if the site has a high potential for harm.
-    Please be concise in your answer.
-
+  content: >    
     Examples of harmful websites include:
     * those that contain sexual content, directly (like pornography)
     * those that depict violence in a graphic or disturbing way
-    * those that encourage use of illegal drugs or substance abuse
+    * those that encourage use of drugs or substance abuse
+    * are typically for adults
 
     Examples of appropriate content includes
     * educational websites
     * reference collections (e.g. an encyclopedia)
     * journalism
 
-    e.g.: 
-    "Harmful": true or false (is the website safe for children),
-    "Confidence": 0 to 100 (the confidence in your response. 100 meaning confident, 0 meaning not confident),
-    "Data_rating": 0 to 100 (is the data sufficient enough to make a decision? 100 meaning sufficient, 0 meaning not sufficient),
-    "Reason": (short explanation of your reasoning)
-
-    Please respond in JSON and always include the keys Harmful, Confidence, Data_rating and Reason.
+    Please analyse {{url}} to determine if the site has any potential for harm at all.
+    {{title}}
+    {{url}}
+    {{description}}
+    
+    Output using JSON in the following format, you will be fined if you don't output the 3 fields (Reasoning, SafeForChildren, Confidence) in the correct format:
+    {
+      "Reasoning": "Output a very short sentence reasoning through the decision you make, the only information you have is in the information above. Then output the SafeForChildren boolean and Confidence level.",
+      "SafeForChildren": "Output just the string 'yes' or 'no'. Would you as a mother let your child view this website?",
+      "Confidence": "low" or "medium" or "high",
+    }
 """)
 
-def build_prompt(description):
-  prompt_as_yaml = prompt_yaml_template.render(description=description)
+def build_prompt(url, title, description):
+  prompt_as_yaml = prompt_yaml_template.render(url=url, title=title, description=description)
   return yaml.load(prompt_as_yaml, Loader=yaml.Loader)
 
 def categorize_harm(client, url, title, description, **kwargs):
   return client.chat.completions.create(
     model='EagleX-V2',
-    messages=build_prompt(description),
+    messages=build_prompt(url, title, description),
     extra_body={
       "response_format": { "type": "json_object" }
     },
     max_tokens=4096,
-    temperature=0.1,
-    top_p=0.2,
+    temperature=0.0,
+    #top_p=0.2,
     **kwargs
   )
 
@@ -82,6 +77,10 @@ if __name__ == "__main__":
     ["https://games.lol", None, "All free online games that are available to download suit for any type of gamer. We got the family-friendliest games suited for kids to more action-packed titles for the mature players."],
     ["https://www.factmonster.com", None, "Fact Monster is a free reference site for students, teachers, and parents. Get homework help and find facts on thousands of subjects, including sports, entertainment, geography, history, biography, education, and health."],
   ]
-
-  response = categorize_harm(client, *examples[2], stream=True)
-  stream_response(response)
+  
+  for example in examples:
+    print(example)
+    response = categorize_harm(client, *example, stream=True)
+    stream_response(response)
+    
+    print("\n\n")
