@@ -1,54 +1,55 @@
-SYSTEM_PROMPT = """
-You are educator. Your goal is to protect children on the internt by identifying high potentials for harm in websites
-so they can be screened by other elements of the system.
+from jinja2 import Template
+import yaml
 
-Examples of harmful websites include:
- * those that contain sexual content, directly (like pornography)
- * those that depict violence in a graphic or disturbing way
- * those that encourage use of illegal drugs or substance abuse
+prompt_yaml_template=Template("""
+- role: system
+  content: >
+    You are educator. Your goal is to protect children on the internet by identifying
+    high potentials for harm in websites
+- role: user
+  content: >
+    Does exposing children to the following site have a high potential for harm?
 
-Examples of appropriate content includes
- * educational websites
- * reference collections (e.g. )
- * journalism
-"""
+    <description>
+    {{description}}
+    </description>
 
-def build_user_prompt(url, title, description):
-  return f"""
-  Does exposing children to the following site have a high potential for harm?
+    Please analyse the <description> to determine if the site has a high potential for harm.
+    Please be concise in your answer.
 
-  The URL is {url}
-  The title of the webpage is {title if title else "(no title given)"}
-  The webpage's description (of itself) is {description if description else "(no description given)"}
+    Examples of harmful websites include:
+    * those that contain sexual content, directly (like pornography)
+    * those that depict violence in a graphic or disturbing way
+    * those that encourage use of illegal drugs or substance abuse
 
-  Please respond in JSON and always include the keys Reasoning, Harmful and Confidence.
-  e.g.:
-  {{
-    "Reason": (short explanation of your reasoning),
-    "Harmful": "yes" or "no",
-    "Confidence": 0 to 100
-  }}
+    Examples of appropriate content includes
+    * educational websites
+    * reference collections (e.g. an encyclopedia)
+    * journalism
 
-  Please be concise in your answer.
+    e.g.: 
+    "Harmful": true or false (is the website safe for children),
+    "Confidence": 0 to 100 (the confidence in your response. 100 meaning confident, 0 meaning not confident),
+    "Data_rating": 0 to 100 (is the data sufficient enough to make a decision? 100 meaning sufficient, 0 meaning not sufficient),
+    "Reason": (short explanation of your reasoning)
 
-  Does that site have a high potential for harm?
-  """
+    Please respond in JSON and always include the keys Harmful, Confidence, Data_rating and Reason.
+""")
 
-def gen_completion(url, title, description):
-  return {
-    "model": 'EagleX-V2',
-    "messages": [
-      { "role": 'System', "content": SYSTEM_PROMPT },
-      { "role": 'User', "content": build_user_prompt(url, title, description) }
-    ],
-    "extra_body": {"response_format": { "type": "json_object" }},
-    "max_tokens": 4096,
-    "temperature": 0.0,
-  }
+def build_prompt(description):
+  prompt_as_yaml = prompt_yaml_template.render(description=description)
+  return yaml.load(prompt_as_yaml, Loader=yaml.Loader)
 
 def categorize_harm(client, url, title, description, **kwargs):
   return client.chat.completions.create(
-    **gen_completion(url, title, description),
+    model='EagleX-V2',
+    messages=build_prompt(description),
+    extra_body={
+      "response_format": { "type": "json_object" }
+    },
+    max_tokens=4096,
+    temperature=0.1,
+    top_p=0.2,
     **kwargs
   )
 
