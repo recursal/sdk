@@ -1,5 +1,6 @@
 from jinja2 import Template
 import yaml
+import json
 
 prompt_yaml_template=Template("""
 - role: system
@@ -40,7 +41,16 @@ def categorize_harm(client, url, title, description, **kwargs):
     model='EagleX-V2',
     messages=build_prompt(url, title, description),
     extra_body={
-      "response_format": { "type": "json_object" }
+      "response_format": {
+        "type": json.dumps({
+          "Assessment": {
+            "Harmful": "$boolean",
+            "Confidence": "$int",
+            "Data_rating": "$int",
+            "Reason": "$string"
+          }
+        })
+      }
     },
     max_tokens=4096,
     temperature=0.0,
