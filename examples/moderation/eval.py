@@ -60,6 +60,6 @@ if __name__ == "__main__":
 
       try:
         generated = json.loads(generated)
-        csv.writerow([url, title, description, *[v for v in generated['Assessment'].values()]])
+        csv.writerow([url, title, description, *[v for v in generated.values()]])
       except Exception as e:
         print(f"JSON parsing failure: {e}")

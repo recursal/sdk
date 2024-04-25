@@ -24,12 +24,17 @@ prompt_yaml_template=Template("""
     {{url}}
     {{description}}
     
-    Output using JSON in the following format, you will be fined if you don't output the 3 fields (Reasoning, SafeForChildren, Confidence) in the correct format:
-    {
-      "Reasoning": "Output a very short sentence reasoning through the decision you make, the only information you have is in the information above. Then output the SafeForChildren boolean and Confidence level.",
-      "SafeForChildren": "Output just the string 'yes' or 'no'. Would you as a mother let your child view this website?",
-      "Confidence": "low" or "medium" or "high",
-    }
+    Output fields:
+    - SafeForChildren
+      Output just the string 'yes' or 'no'. Would you as a mother let your child view this website?
+      
+    - Confidence
+      "low" or "medium" or "high"
+      
+    - Reasoning
+      Output a single very short sentence reasoning through the decision you make, the only information you have is in the information above. Then output the SafeForChildren boolean and Confidence level.
+    
+    Output using JSON.
 """)
 
 def build_prompt(url, title, description):
@@ -43,12 +48,9 @@ def categorize_harm(client, url, title, description, **kwargs):
     extra_body={
       "response_format": {
         "type": json.dumps({
-          "Assessment": {
-            "Harmful": "$boolean",
-            "Confidence": "$int",
-            "Data_rating": "$int",
-            "Reason": "$string"
-          }
+            "Reasoning": "$string",
+            "SafeForChildren": "$string",
+            "Confidence": "$string",
         })
       }
     },
