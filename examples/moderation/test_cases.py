@@ -1,10 +1,12 @@
 import requests
 import csv
-from bs4 import BeautifulSoup
 import sqlite3
+import os
 
-TEMPLATE_FILE='test-cases.base.csv'
-DB_PATH='moderation.db'
+from bs4 import BeautifulSoup
+
+TEMPLATE_FILE=os.path.join(os.path.dirname(__file__), 'test-cases.base.csv')
+DB_PATH=os.path.join(os.path.dirname(__file__), 'moderation.db')
 
 def get_db_connection():
   return sqlite3.connect(DB_PATH)
@@ -26,7 +28,7 @@ def get_meta_description(page_content):
   return t.get('content') if t else None
 
 def init_db():
-  with open(TEMPLATE_FILE, 'r') as csvfile, sqlite3.connect(DB_PATH) as conn:
+  with open(TEMPLATE_FILE, 'r') as csvfile, get_db_connection() as conn:
     ensure_table(conn)
     spamreader = csv.DictReader(csvfile)
     c = conn.cursor()
@@ -52,4 +54,7 @@ def init_db():
       except Exception as e:
         print(f"Failure with {url}: {e}. Skipping.")
         pass
+
+if __name__ == "__main__":
+  init_db()
 
